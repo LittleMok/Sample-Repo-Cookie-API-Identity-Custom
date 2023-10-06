@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "37a29fe8-f982-4618-9e15-72916226a2dc",
+		"name": "C# Custom-ish Identity implementation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7349351"
+	},
+	"item": [
+		{
+			"name": "Protected endpoint (Logged users)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5098/api/weatherforecast",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5098",
+					"path": [
+						"api",
+						"weatherforecast"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json()\r",
+							"pm.collectionVariables.set(\"BEARER_TOKEN\", res.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Username\":\"admin\",\r\n    \"Password\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5098/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5098",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Protected endpoint (By role)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5098/api/test-role",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5098",
+					"path": [
+						"api",
+						"test-role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Protected endpoint (By unexistant role)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5098/api/test-role-dont-exists",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5098",
+					"path": [
+						"api",
+						"test-role-dont-exists"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "BEARER_TOKEN",
+			"value": ""
+		}
+	]
+}
