@@ -5,5 +5,6 @@ namespace TestIdentity.Identity.Stores
     public interface ICustomSessionStore
     {
         IEnumerable<AuthenticationTicket> GetSessions(string username);
+        Task RemoveAllAsync(string username);
     }
 }

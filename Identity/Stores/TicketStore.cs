@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
+using System.Security.Claims;
 
 namespace TestIdentity.Identity.Stores
 {
@@ -56,6 +57,11 @@ namespace TestIdentity.Identity.Stores
                 tickets.Add(key);
                 _tickets[username!] = tickets;
             }
+
+            ticket.Principal.AddIdentity(new ClaimsIdentity(new List<Claim>()
+            {
+                new("SID", key)
+            }));
             ticket.Properties.SetString("SessionId", key);
             _memoryCache.Set(key, ticket);
             return Task.FromResult(key);
@@ -73,6 +79,18 @@ namespace TestIdentity.Identity.Stores
                 }
             }
             return sessions;
+        }
+
+        public Task RemoveAllAsync(string username)
+        {
+            foreach(var session in GetSessions(username.ToLower()))
+            {
+                var key = session.Properties.GetString("SessionId");
+                RemoveAsync(key);
+            }
+
+            _tickets.Remove(username.ToLower());
+            return Task.CompletedTask;
         }
     }
 }

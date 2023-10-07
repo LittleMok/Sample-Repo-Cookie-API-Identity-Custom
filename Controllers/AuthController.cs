@@ -38,13 +38,20 @@ namespace TestIdentity.Controllers
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout([FromQuery(Name = "sid")] string sessionId = "")
         {
-            await _signInManager.SignOutAsync();
+            if (string.IsNullOrWhiteSpace(sessionId))
+            {
+                await _signInManager.SignOutAsync();
+            } else
+            {
+                var ticketStore = (ITicketStore)_sessionStore;
+                await ticketStore.RemoveAsync(sessionId);
+            }
+            
             return Ok();
         }
 
-        [Authorize]
         [HttpGet("me")]
         public IActionResult GetMyInfo()
         {
@@ -55,7 +62,8 @@ namespace TestIdentity.Controllers
                         principal?.Identity?.Name,
                         Roles = principal?.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value),
                         Permissions = principal?.Claims?.Where(x => x.Type == "Permission").Select(x => x.Value),
-                        principal?.Identity?.IsAuthenticated
+                        principal?.Identity?.IsAuthenticated,
+                        CurrentSid = principal?.Claims?.Where(x => x.Type == "SID").Select(x => x.Value).FirstOrDefault(string.Empty)
                     }
                 );
         }
@@ -80,6 +88,16 @@ namespace TestIdentity.Controllers
                 result.Add(_new);
             }
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("logout-all")]
+        public async Task<IActionResult> LogoutAll()
+        {
+            var username = User?.Identity?.Name;
+            await _sessionStore.RemoveAllAsync(username!);
+
+            return Ok();
         }
     }
 }
