@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace TestIdentity.Controllers
 {
@@ -12,7 +13,11 @@ namespace TestIdentity.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok("Test role don't exists works");
+            return Ok(new
+            {
+                Status = HttpStatusCode.OK,
+                Message = "Endpoint `test-role-dont-exists` works"
+            });
         }
     }
 }

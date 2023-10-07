@@ -19,7 +19,11 @@ namespace TestIdentity.Identity.Stores
                 Claims = new List<Claim>()
                 {
                     new Claim(ClaimTypes.Role, "Superuser"),
-                    new Claim(ClaimTypes.Role, "Admin")
+                    new Claim(ClaimTypes.Role, "Admin"),
+                    new Claim("Permission", "ReadUser"),
+                    new Claim("Permission", "ClearUsers"),
+                    new Claim("Permission", "EditUsers"),
+                    new Claim("Permission", "ReadSingleForecast")
                 }
             }
         };

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using TestIdentity.Identity.Filters;
 
 namespace TestIdentity.Controllers
 {
@@ -32,6 +33,26 @@ namespace TestIdentity.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet("single")]
+        [PermissionRequirement("ReadSingleForecast")]
+        public WeatherForecast GetForecast()
+        {
+            var result = Enumerable.Range(1, 1).Select(index => new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            });
+            return result.First();
+        }
+
+        [HttpPost]
+        [PermissionRequirement("CreateForecast")]
+        public IActionResult PostForecast()
+        {
+            return Created("/api/forecasts", new WeatherForecast());
         }
     }
 }

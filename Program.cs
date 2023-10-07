@@ -1,12 +1,18 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Session;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Protocol;
+using System.Net;
 using System.Text;
-using TestIdentity.Identity;
 using TestIdentity.Identity.CustomModel;
 using TestIdentity.Identity.Managers;
 using TestIdentity.Identity.Stores;
-using TestIdentity.JwtAuthorization;
 
 namespace TestIdentity
 {
@@ -26,52 +32,49 @@ namespace TestIdentity
             // Add services to the container.
 
             builder.Services.AddControllers();
-            builder.Services.Configure<JwtConfiguration>(configuration.GetRequiredSection(nameof(JwtConfiguration)));
+            builder.Services.AddMemoryCache();
+            builder.Services.AddSingleton<ITicketStore, TicketStore>();
 
             builder.Services
-                .AddIdentity<AppUser, AppRole>()
-                .AddUserManager<AppUserManager>()
-                .AddUserStore<UserStore>()
-                .AddRoleStore<RoleStore>();
+                   .AddIdentity<AppUser, AppRole>()
+                   .AddUserManager<AppUserManager>()
+                   .AddUserStore<UserStore>()
+                   .AddRoleStore<RoleStore>();
 
-            builder.Services.AddAuthentication(options =>
+            builder.Services
+                .AddAuthentication();
+
+            builder.Services.ConfigureApplicationCookie((configure) =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(configure =>
-            {
-                var jwt = configuration.GetRequiredSection(nameof(JwtConfiguration)).Get<JwtConfiguration>();
-                configure.SaveToken = jwt!.SaveToken;
-                configure.Audience = jwt.Audience;
-                configure.TokenValidationParameters = new()
+                configure.Cookie.Name = "TestIdentityCookie";
+                configure.Events.OnRedirectToLogin = c =>
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = jwt.Audience,
-                    ValidIssuer = jwt.ValidIssuer,
-                    ValidateLifetime = true,
-                    ValidateTokenReplay = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidateActor = true,
-                    RequireExpirationTime = true,
-                    ClockSkew = TimeSpan.Zero,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.SigningKey))
+                    c.Response.Clear();
+                    c.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    c.RedirectUri = string.Empty;
+                    return Task.CompletedTask;
+                };
+                configure.Events.OnRedirectToAccessDenied = c =>
+                {
+                    c.Response.Clear();
+                    c.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    c.RedirectUri = string.Empty;
+                    return Task.CompletedTask;
                 };
             });
+            builder.Services
+                .AddOptions<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme)
+                .Configure<ITicketStore>((options, store) => options.SessionStore = store);
+
             builder.Services.AddAuthorization();
-            builder.Services.AddScoped<JwtService>();
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-
             app.UseAuthentication();
             app.UseAuthorization();
 
-
             app.MapControllers();
-
             app.Run();
         }
     }
