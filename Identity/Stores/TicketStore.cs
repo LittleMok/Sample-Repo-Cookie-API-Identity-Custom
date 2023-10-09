@@ -48,10 +48,11 @@ namespace TestIdentity.Identity.Stores
         {
             var key = ticket.Properties.GetString("SessionId") ?? Guid.NewGuid().ToString();
             var username = ticket.Principal?.Identity?.Name?.ToLower();
-            if(_tickets.TryGetValue(username!, out var tickets))
+            if (_tickets.TryGetValue(username!, out var tickets))
             {
                 tickets.Add(key);
-            } else
+            }
+            else
             {
                 tickets = new();
                 tickets.Add(key);
@@ -70,9 +71,9 @@ namespace TestIdentity.Identity.Stores
         public IEnumerable<AuthenticationTicket> GetSessions(string username)
         {
             var sessions = new List<AuthenticationTicket>();
-            if(_tickets.TryGetValue(username.ToLower(), out var tickets))
+            if (_tickets.TryGetValue(username.ToLower(), out var tickets))
             {
-                foreach(var ticket in tickets)
+                foreach (var ticket in tickets)
                 {
                     var session = _memoryCache.Get<AuthenticationTicket>(ticket);
                     sessions.Add(session!);
@@ -83,7 +84,7 @@ namespace TestIdentity.Identity.Stores
 
         public Task RemoveAllAsync(string username)
         {
-            foreach(var session in GetSessions(username.ToLower()))
+            foreach (var session in GetSessions(username.ToLower()))
             {
                 var key = session.Properties.GetString("SessionId");
                 RemoveAsync(key);

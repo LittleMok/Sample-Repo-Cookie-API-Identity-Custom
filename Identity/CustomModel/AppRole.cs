@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace TestIdentity.Identity.CustomModel
+﻿namespace TestIdentity.Identity.CustomModel
 {
     public class AppRole
     {

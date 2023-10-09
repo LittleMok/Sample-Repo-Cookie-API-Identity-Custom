@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Security.Claims;
 using TestIdentity.Identity.CustomModel;
 
 namespace TestIdentity.Identity.Stores
@@ -21,7 +20,7 @@ namespace TestIdentity.Identity.Stores
         {
             var foundUser = await _appContext.Users.FindAsync(user.Id, cancellationToken);
             var role = await _roleStore.FindByNameAsync(roleName, cancellationToken);
-            if(role is null)
+            if (role is null)
             {
                 throw new ArgumentNullException(nameof(role));
             }
@@ -40,7 +39,8 @@ namespace TestIdentity.Identity.Stores
                 _appContext.Users.Update(user);
                 await _appContext.SaveChangesAsync(cancellationToken);
                 result = IdentityResult.Success;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 result = IdentityResult.Failed(new IdentityError()
                 {

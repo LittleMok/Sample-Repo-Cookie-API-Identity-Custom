@@ -1,22 +1,10 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Session;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using NuGet.Protocol;
 using System.Net;
-using System.Text;
+using TestIdentity.DataAccess;
 using TestIdentity.Identity.CustomModel;
 using TestIdentity.Identity.Managers;
 using TestIdentity.Identity.Stores;
-using Microsoft.EntityFrameworkCore.InMemory;
-using Microsoft.EntityFrameworkCore;
-using TestIdentity.DataAccess;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace TestIdentity
 {

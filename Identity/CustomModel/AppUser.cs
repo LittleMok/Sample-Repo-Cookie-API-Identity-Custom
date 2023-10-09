@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Claims;
-using System.Security.Principal;
-
-namespace TestIdentity.Identity.CustomModel
+﻿namespace TestIdentity.Identity.CustomModel
 {
     public class AppUser
     {

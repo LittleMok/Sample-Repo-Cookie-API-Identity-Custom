@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TestIdentity.Identity.CustomModel;
 using TestIdentity.Identity.DTO;
@@ -49,12 +48,13 @@ namespace TestIdentity.Controllers
             if (string.IsNullOrWhiteSpace(sessionId))
             {
                 await _signInManager.SignOutAsync();
-            } else
+            }
+            else
             {
                 var ticketStore = (ITicketStore)_sessionStore;
                 await ticketStore.RemoveAsync(sessionId);
             }
-            
+
             return Ok();
         }
 
@@ -62,10 +62,11 @@ namespace TestIdentity.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterModel user)
         {
             var result = await _userManager.CreateAsync(user.AsAppUser(), user.Password);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return Ok();
-            } else
+            }
+            else
             {
                 return BadRequest(result.Errors);
             }
@@ -91,7 +92,7 @@ namespace TestIdentity.Controllers
         [HttpGet("sessions")]
         public IActionResult GetSessions()
         {
-            var username = User.Identity?.Name;   
+            var username = User.Identity?.Name;
             var sessions = _sessionStore.GetSessions(username!);
             var result = new List<dynamic>();
             foreach (var session in sessions.Distinct())
