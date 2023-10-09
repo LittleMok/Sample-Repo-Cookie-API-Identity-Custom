@@ -13,6 +13,10 @@ using System.Text;
 using TestIdentity.Identity.CustomModel;
 using TestIdentity.Identity.Managers;
 using TestIdentity.Identity.Stores;
+using Microsoft.EntityFrameworkCore.InMemory;
+using Microsoft.EntityFrameworkCore;
+using TestIdentity.DataAccess;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace TestIdentity
 {
@@ -67,9 +71,19 @@ namespace TestIdentity
                 .Configure<ITicketStore>((options, store) => options.SessionStore = store);
 
             builder.Services.AddAuthorization();
+            builder.Services.AddInMemoryDatabase();
+            builder.Services.AddScoped<IRoleStore<AppRole>, RoleStore>();
+            builder.Services.AddScoped<IUserStore<AppUser>, UserStore>();
 
             var app = builder.Build();
 
+            if (!app.Environment.IsProduction())
+            {
+                app.UseDeveloperExceptionPage();
+
+                var context = app.Services.GetRequiredService<DataAccess.AppContext>();
+                context.Database.EnsureCreated();
+            }
             // Configure the HTTP request pipeline.
             app.UseAuthentication();
             app.UseAuthorization();

@@ -27,13 +27,19 @@ namespace TestIdentity.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model, CancellationToken token)
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return Ok();
+            }
+
             var user = await _userManager.FindByNameAsync(model.Username ?? "");
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password ?? ""))
             {
-                var customClaims = user.Claims.Where(x => x.Type == "Permission");
-                await _signInManager.SignInWithClaimsAsync(user, model.RememberMe ?? false, customClaims);
+                // var claims = user.Roles.Select(x => new Claim(ClaimTypes.Role, x.Name));
+                await _signInManager.SignInAsync(user, model.RememberMe ?? false);
                 return Ok();
             }
+
             return Unauthorized();
         }
 
@@ -50,6 +56,19 @@ namespace TestIdentity.Controllers
             }
             
             return Ok();
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterModel user)
+        {
+            var result = await _userManager.CreateAsync(user.AsAppUser(), user.Password);
+            if(result.Succeeded)
+            {
+                return Ok();
+            } else
+            {
+                return BadRequest(result.Errors);
+            }
         }
 
         [HttpGet("me")]

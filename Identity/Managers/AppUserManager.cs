@@ -10,34 +10,22 @@ namespace TestIdentity.Identity.Managers
         {
         }
         
-        public override async Task<bool> CheckPasswordAsync(AppUser user, string password)
+        public override Task<bool> CheckPasswordAsync(AppUser user, string password)
         {
-            CancellationTokenSource source = new();
-            CancellationToken token = source.Token;
-
-            var id = await Store.GetUserIdAsync(user, token);
-            var found = await Store.FindByIdAsync(id, token);
-
-            if(found != null && found.Password == password)
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
+            return base.CheckPasswordAsync(user, password);
         }
 
         public override async Task<AppUser?> FindByNameAsync(string userName)
         {
-            CancellationTokenSource source = new();
-            CancellationToken token = source.Token;
+            CancellationTokenSource source = new CancellationTokenSource();
+            var cancellationToken = source.Token;
 
-            var normalized = await Store.GetNormalizedUserNameAsync(new AppUser()
-            {
-                Username = userName,
-            }, token);
-            var found = await Store.FindByNameAsync(normalized ?? "", token);
-            return found;
+            return await Store.FindByNameAsync(userName, cancellationToken);
+        }
+
+        public override Task<IdentityResult> CreateAsync(AppUser user, string password)
+        {
+            return base.CreateAsync(user, password);
         }
     }
 }
