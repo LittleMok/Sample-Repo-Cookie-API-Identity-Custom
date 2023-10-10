@@ -29,5 +29,6 @@
         public string? Description { get; set; }
 
         public List<AppUser> Users { get; set; }
+        public List<AppPermission> Permissions { get; set; }
     }
 }

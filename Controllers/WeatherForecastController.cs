@@ -51,7 +51,12 @@ namespace TestIdentity.Controllers
         [PermissionRequirement("CreateForecast")]
         public IActionResult PostForecast()
         {
-            return Created("/api/forecasts", new WeatherForecast());
+            return Created("/api/forecasts", new WeatherForecast()
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now),
+                TemperatureC = 10,
+                Summary = "I wish it was this cold here"
+            });
         }
     }
 }

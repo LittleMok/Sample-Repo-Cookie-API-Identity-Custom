@@ -7,7 +7,50 @@
 	},
 	"item": [
 		{
-			"name": "Login",
+			"name": "My info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/me",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "01_Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Name\":\"Ivan\",\r\n    \"Email\":\"ivan@example.com\",\r\n    \"Username\":\"admin\",\r\n    \"Password\":\"RhnokAKnN%9fmVY\",\r\n    \"Roles\": [ 1, 2 ]\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/register",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "02_Login",
 			"event": [
 				{
 					"listen": "test",
@@ -24,7 +67,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"Username\":\"admin\",\r\n    \"Password\":\"password\"\r\n}",
+					"raw": "{\r\n    \"Username\":\"ivan@example.com\",\r\n    \"Password\":\"RhnokAKnN%9fmVY\",\r\n    \"RememberMe\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -32,14 +75,120 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5098/login",
-					"protocol": "http",
+					"raw": "{{URL}}/login",
 					"host": [
-						"localhost"
+						"{{URL}}"
 					],
-					"port": "5098",
 					"path": [
 						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "03_My sessions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/sessions",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"sessions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "04_Test Superuser Role",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/test-role",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"test-role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "05_Test non-existant Role",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/test-role-dont-exists",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"test-role-dont-exists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "06_Test requiered Authenticated user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/WeatherForecast",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"WeatherForecast"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "07_Test ReadSingleForecast Permission",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/WeatherForecast/single",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"WeatherForecast",
+						"single"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "07_Test CreateForecast Permission",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/api/WeatherForecast",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"WeatherForecast"
 					]
 				}
 			},
@@ -62,62 +211,53 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5098/logout",
-					"protocol": "http",
+					"raw": "{{URL}}/logout",
 					"host": [
-						"localhost"
+						"{{URL}}"
 					],
-					"port": "5098",
 					"path": [
 						"logout"
 					]
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		},
 		{
-			"name": "My info",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5098/me",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5098",
-					"path": [
-						"me"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "My sessions",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5098/sessions",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5098",
-					"path": [
-						"sessions"
-					]
-				}
-			},
-			"response": []
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"variable": [
 		{
 			"key": "BEARER_TOKEN",
 			"value": ""
+		},
+		{
+			"key": "URL",
+			"value": "https://w270750.ferozo.com/",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "URL",
+			"value": "http://localhost:5098",
+			"type": "string"
 		}
 	]
 }

@@ -26,7 +26,7 @@ namespace TestIdentity.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model, CancellationToken token)
         {
-            if (this.User.Identity.IsAuthenticated)
+            if (this.User?.Identity?.IsAuthenticated ?? false)
             {
                 return Ok();
             }
@@ -34,8 +34,7 @@ namespace TestIdentity.Controllers
             var user = await _userManager.FindByNameAsync(model.Username ?? "");
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password ?? ""))
             {
-                // var claims = user.Roles.Select(x => new Claim(ClaimTypes.Role, x.Name));
-                await _signInManager.SignInAsync(user, model.RememberMe ?? false);
+                await _signInManager.SignInWithClaimsAsync(user, model.RememberMe ?? false, user.Permissions);
                 return Ok();
             }
 
@@ -79,7 +78,7 @@ namespace TestIdentity.Controllers
             return Ok(
                     new
                     {
-                        principal?.Identity?.Name,
+                        Name = principal?.Identity?.Name ?? "Anonimo",
                         Roles = principal?.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value),
                         Permissions = principal?.Claims?.Where(x => x.Type == "Permission").Select(x => x.Value),
                         principal?.Identity?.IsAuthenticated,
@@ -102,7 +101,8 @@ namespace TestIdentity.Controllers
                     SessionId = session.Properties.GetString("SessionId"),
                     session.AuthenticationScheme,
                     session.Properties.IssuedUtc,
-                    session.Properties.ExpiresUtc,
+                    ExpiresUtc = session.Properties.IsPersistent ? null : session.Properties.ExpiresUtc,
+                    session.Properties.IsPersistent,
                     session.Properties.AllowRefresh
                 };
                 result.Add(_new);

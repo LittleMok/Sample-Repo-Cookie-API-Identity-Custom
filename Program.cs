@@ -20,7 +20,7 @@ namespace TestIdentity
                 .AddCommandLine(args)
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env}.json", true)
-                .AddEnvironmentVariables()
+                .AddEnvironmentVariables($"{typeof(Program).Namespace}_")
                 .Build();
             // Add services to the container.
 
@@ -60,7 +60,7 @@ namespace TestIdentity
                 .Configure<ITicketStore>((options, store) => options.SessionStore = store);
 
             builder.Services.AddAuthorization();
-            builder.Services.AddInMemoryDatabase();
+            builder.Services.AddInMemoryDatabase(configuration);
             builder.Services.AddScoped<IRoleStore<AppRole>, RoleStore>();
             builder.Services.AddScoped<IUserStore<AppUser>, UserStore>();
 

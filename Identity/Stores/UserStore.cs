@@ -84,7 +84,7 @@ namespace TestIdentity.Identity.Stores
         {
             var result = await _appContext.Users
                 .Where(x => x.Username.ToLower() == normalizedUserName.ToLower() || x.Email.ToLower() == normalizedUserName.ToLower())
-                .Include(x => x.Roles)
+                .Include(x => x.Roles).ThenInclude(r => r.Permissions)
                 .FirstOrDefaultAsync(cancellationToken);
 
             return result;

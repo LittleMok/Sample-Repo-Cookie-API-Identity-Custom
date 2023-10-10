@@ -11,23 +11,36 @@ namespace TestIdentity.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var permissionEntity = modelBuilder.Entity<AppPermission>();
+            permissionEntity.HasKey(x => x.Id);
+            permissionEntity.HasOne(x => x.Role)
+                .WithMany(x => x.Permissions)
+                .HasForeignKey(x => x.RoleId);
+            
             var roleEntity = modelBuilder.Entity<AppRole>();
             roleEntity.HasKey(x => x.Id);
-            roleEntity.HasData(AppRole.SeedRoles);
+            roleEntity.HasMany(x => x.Permissions)
+                .WithOne(x => x.Role);
 
             var userEntity = modelBuilder.Entity<AppUser>();
             userEntity.HasKey(x => x.Id);
             userEntity.HasMany(x => x.Roles).WithMany(x => x.Users);
+            userEntity.Ignore(x => x.Permissions);
+
+            roleEntity.HasData(AppRole.SeedRoles);
+            permissionEntity.HasData(AppPermission.SeedPermissions);
         }
     }
 
     public static class AppContextInstaller
     {
-        public static IServiceCollection AddInMemoryDatabase(this IServiceCollection services)
+        public static IServiceCollection AddInMemoryDatabase(this IServiceCollection services, IConfigurationRoot configuration)
         {
+            var connectionString = configuration.GetConnectionString("Default");
+
             services.AddDbContext<AppContext>(options =>
             {
-                options.UseInMemoryDatabase("TestDb");
+                options.UseNpgsql(connectionString);
             });
 
             return services;

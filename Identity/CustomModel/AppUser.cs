@@ -1,4 +1,6 @@
-﻿namespace TestIdentity.Identity.CustomModel
+﻿using System.Security.Claims;
+
+namespace TestIdentity.Identity.CustomModel
 {
     public class AppUser
     {
@@ -9,5 +11,9 @@
         public string Password { get; set; }
 
         public List<AppRole> Roles { get; set; }
+
+        public List<Claim> Permissions { get {
+                return this.Roles?.SelectMany(x => x.Permissions).Select(x => new Claim("Permission", x.Name)).ToList() ?? new();
+            } }
     }
 }
