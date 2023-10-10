@@ -26,11 +26,6 @@ namespace TestIdentity.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model, CancellationToken token)
         {
-            if (this.User?.Identity?.IsAuthenticated ?? false)
-            {
-                return Ok();
-            }
-
             var user = await _userManager.FindByNameAsync(model.Username ?? "");
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password ?? ""))
             {

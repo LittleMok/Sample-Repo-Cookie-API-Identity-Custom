@@ -60,7 +60,7 @@ namespace TestIdentity
                 .Configure<ITicketStore>((options, store) => options.SessionStore = store);
 
             builder.Services.AddAuthorization();
-            builder.Services.AddInMemoryDatabase(configuration);
+            builder.Services.AddDatabase(configuration, "Default");
             builder.Services.AddScoped<IRoleStore<AppRole>, RoleStore>();
             builder.Services.AddScoped<IUserStore<AppUser>, UserStore>();
 

@@ -30,7 +30,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"Name\":\"Ivan\",\r\n    \"Email\":\"ivan@example.com\",\r\n    \"Username\":\"admin\",\r\n    \"Password\":\"RhnokAKnN%9fmVY\",\r\n    \"Roles\": [ 1, 2 ]\r\n\r\n}",
+					"raw": "{\r\n    \"Name\":\"Ivan\",\r\n    \"Email\":\"ivan@example.com\",\r\n    \"Username\":\"admin\",\r\n    \"Password\":\"RhnokAKnN%9fmVY\",\r\n    \"Roles\": [ 1, 2 ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -67,7 +67,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"Username\":\"ivan@example.com\",\r\n    \"Password\":\"RhnokAKnN%9fmVY\",\r\n    \"RememberMe\": false\r\n}",
+					"raw": "{\r\n    \"Username\":\"admi2n\",\r\n    \"Password\":\"RhnokAKnN%9fmVY\",\r\n    \"RememberMe\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

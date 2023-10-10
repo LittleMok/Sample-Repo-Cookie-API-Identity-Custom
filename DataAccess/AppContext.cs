@@ -34,9 +34,9 @@ namespace TestIdentity.DataAccess
 
     public static class AppContextInstaller
     {
-        public static IServiceCollection AddInMemoryDatabase(this IServiceCollection services, IConfigurationRoot configuration)
+        public static IServiceCollection AddDatabase(this IServiceCollection services, IConfigurationRoot configuration, string connectionStringName)
         {
-            var connectionString = configuration.GetConnectionString("Default");
+            var connectionString = configuration.GetConnectionString(connectionStringName);
 
             services.AddDbContext<AppContext>(options =>
             {
