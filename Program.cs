@@ -20,6 +20,7 @@ namespace TestIdentity
                 .AddCommandLine(args)
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env}.json", true)
+                .AddEnvironmentVariables()
                 .Build();
             // Add services to the container.
 
