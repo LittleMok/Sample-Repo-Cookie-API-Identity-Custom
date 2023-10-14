@@ -12,10 +12,10 @@
 Properties/launchSettings.json
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-
+./certs/*
 # Mono auto generated files
 mono_crash.*
-
+.env
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
