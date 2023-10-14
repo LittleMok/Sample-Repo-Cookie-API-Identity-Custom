@@ -40,7 +40,8 @@ namespace TestIdentity.DataAccess
 
             services.AddDbContext<AppContext>(options =>
             {
-                options.UseNpgsql(connectionString);
+                options.UseNpgsql(connectionString)
+                       .UseSnakeCaseNamingConvention();
             });
 
             return services;

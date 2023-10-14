@@ -93,7 +93,7 @@ namespace TestIdentity.Controllers
             {
                 var _new = new
                 {
-                    SessionId = session.Properties.GetString("SessionId"),
+                    SessionId = session.Properties.GetString(TicketStore.SessionIdClaimType),
                     session.AuthenticationScheme,
                     session.Properties.IssuedUtc,
                     ExpiresUtc = session.Properties.IsPersistent ? null : session.Properties.ExpiresUtc,

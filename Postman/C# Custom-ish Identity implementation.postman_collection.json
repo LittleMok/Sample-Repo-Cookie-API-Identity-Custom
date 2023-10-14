@@ -67,7 +67,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"Username\":\"admi2n\",\r\n    \"Password\":\"RhnokAKnN%9fmVY\",\r\n    \"RememberMe\": false\r\n}",
+					"raw": "{\r\n    \"Username\":\"admin\",\r\n    \"Password\":\"RhnokAKnN%9fmVY\",\r\n    \"RememberMe\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -250,14 +250,14 @@
 		},
 		{
 			"key": "URL",
-			"value": "https://w270750.ferozo.com/",
-			"type": "string",
-			"disabled": true
+			"value": "https://api.identity.local",
+			"type": "string"
 		},
 		{
 			"key": "URL",
 			"value": "http://localhost:5098",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		}
 	]
 }

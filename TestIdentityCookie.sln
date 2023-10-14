@@ -7,6 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestIdentity", "TestIdentit
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{E6649B66-C722-4991-9F88-C9292DE5C8EA}"
 	ProjectSection(SolutionItems) = preProject
+		.env = .env
+		.env.example = .env.example
+		docker-compose-build.yaml = docker-compose-build.yaml
+		docker-compose.yaml = docker-compose.yaml
+		nginx.conf = nginx.conf
 		README.md = README.md
 	EndProjectSection
 EndProject
